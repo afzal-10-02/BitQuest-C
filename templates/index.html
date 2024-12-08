@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files in Folder</title>
+    <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        table {
+            width: 80%;
+            margin: 1rem 5rem auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .btn{
+            border: 0;
+            border-radius: 5px;
+            padding: 5px 8px;
+            margin: 0 8px;
+        }
+        .btn-show{
+            background-color: #4CAF50;
+        }
+        .btn-download{
+            background-color: #007BFF;
+        }
+        .btn-delete{
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Files in Folder</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Size (Bytes)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if files %}
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.size }}</td>
+                    <td>
+                        <a href="/file/show?filename={{file.name[:-4]}}"><button type="button" class="btn btn-show">Show</button></a>
+                        <a href="/file/download?filename={{file.name[:-4]}}"><button type="button" class="btn btn-download">Download</button></a>
+                        <a href="/file/delete?filename={{file.name[:-4]}}"><button type="button" class="btn btn-delete">Delete</button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">No files found in the folder.</td>
+                </tr>
+            {% endif %}
+        </tbody>   
+    </table>
+
+    <div>
+        <h3>Create a New File</h3>
+        <form action="/file/create" method="GET">
+            <label for="filename">File Name:</label><br>
+            <input type="text" id="filename" name="filename" required><br><br>
+            <button type="submit">Create File</button>
+        </form>
+    </div>
+
+</body>
+</html>
